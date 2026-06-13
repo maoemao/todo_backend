@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.env
+.gitignore
+.npmrc
+yarn.lock
+.DS_Store
+.vscode
+*.log
+test
+coverage

@@ -87,6 +87,57 @@ npx ts-node -r tsconfig-paths/register src/main.ts
 npm run start:dev
 ```
 
+## Docker 部署
+
+### 环境要求
+
+- Docker >= 20.x
+- Docker Compose >= 2.x
+
+### 使用 Docker Compose 启动
+
+```bash
+docker-compose up -d
+```
+
+### 首次启动时执行数据库迁移
+
+```bash
+docker exec -it todo-backend npx prisma migrate deploy
+```
+
+### 服务访问
+
+- API 服务器: `http://localhost:3000`
+- Swagger UI: `http://localhost:3000/api`
+- PostgreSQL: `localhost:5432`
+
+### Docker Compose 配置说明
+
+`docker-compose.yml` 包含两个服务：
+
+1. **postgres** - PostgreSQL 数据库服务
+   - 端口映射: `5432:5432`
+   - 默认数据库: `todo_db`
+   - 默认用户: `postgres`
+   - 默认密码: `postgres`
+
+2. **app** - NestJS 应用服务
+   - 端口映射: `3000:3000`
+   - 依赖 PostgreSQL 服务启动
+
+### 停止服务
+
+```bash
+docker-compose down
+```
+
+### 查看日志
+
+```bash
+docker-compose logs -f
+```
+
 ## API 文档
 
 启动服务后访问 Swagger UI：`http://localhost:3000/api`
@@ -108,6 +159,10 @@ todo_backend/
 │   ├── middleware/        # 中间件
 │   ├── app.module.ts      # 根模块
 │   └── main.ts            # 入口文件
+├── Dockerfile
+├── docker-compose.yml
+├── postman-collection.json
+├── postman-environment.json
 ├── package.json
 ├── tsconfig.json
 └── .env
