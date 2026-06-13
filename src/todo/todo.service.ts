@@ -7,8 +7,15 @@ export class TodoService {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: string, createDto: CreateTodoDto) {
+    const data: any = { ...createDto, userId };
+    
+    // 转换 dueDate 格式：YYYY-MM-DD -> YYYY-MM-DDTHH:mm:ss.sssZ
+    if (data.dueDate) {
+      data.dueDate = new Date(data.dueDate);
+    }
+    
     return this.prisma.todo.create({
-      data: { ...createDto, userId },
+      data,
       include: { project: true },
     });
   }
@@ -34,9 +41,17 @@ export class TodoService {
 
   async update(userId: string, id: string, updateDto: UpdateTodoDto) {
     await this.findOne(userId, id);
+    
+    const data: any = { ...updateDto };
+    
+    // 转换 dueDate 格式
+    if (data.dueDate) {
+      data.dueDate = new Date(data.dueDate);
+    }
+    
     return this.prisma.todo.update({
       where: { id },
-      data: updateDto,
+      data,
       include: { project: true },
     });
   }

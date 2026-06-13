@@ -97,7 +97,7 @@ npm run start:dev
 ### 使用 Docker Compose 启动
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 ### 首次启动时执行数据库迁移
