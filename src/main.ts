@@ -7,7 +7,18 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  
+  // 详细的 CORS 配置
+  app.enableCors({
+    origin: process.env.NODE_ENV === 'production' 
+      ? ['https://yourdomain.com', 'https://www.yourdomain.com'] 
+      : ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Trace-ID'],
+    exposedHeaders: ['X-Trace-ID'],
+    credentials: true,
+    maxAge: 3600,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Todo API')
